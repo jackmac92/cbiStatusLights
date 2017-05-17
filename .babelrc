@@ -1,0 +1,10 @@
+{
+    "presets": [ "es2015"],
+    "plugins": [
+        "transform-class-properties",
+        "transform-export-extensions",
+        "transform-flow-strip-types",
+        "transform-object-assign",
+        "transform-object-rest-spread"
+    ]
+}
