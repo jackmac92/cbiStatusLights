@@ -11,7 +11,8 @@ export default {
     tests: [
       'api/selenium-grid-dev',
       'api/selenium-grid-staging',
-      'cbi-site/selenium-grid-dev'
+      'cbi-site/selenium-grid-dev',
+      'cbi-site/selenium-grid-staging'
     ],
     builds: ['cbi-site/develop']
   }
