@@ -1,4 +1,4 @@
-import bitbar from 'bitbar';
+const bitbar = require('bitbar');
 import { getJobInfo } from 'cbiJenkins';
 import { getManyServers } from 'cbiServerUtils';
 import config from './config';
@@ -15,6 +15,9 @@ const jobStore = {
   }))
 };
 
+const DEFAULT_ENVS = ['dev', 'staging', 'prod'];
+const DEFAULT_SERVERS = ['api', 'cbi-site', 'test-runner'];
+
 const setupSshActions = (envs, servers) =>
   getManyServers(envs, servers).then(serverMap =>
     Object.keys(serverMap).map(server => ({
@@ -30,16 +33,18 @@ const setupSshActions = (envs, servers) =>
       }))
     }))
   );
-const DEFAULT_ENVS = ['dev', 'staging', 'prod'];
-const DEFAULT_SERVERS = ['api', 'cbi-site', 'test-runner'];
 
-const getJenkinsTests = Promise.all(
-  jobStore.tests.map(j => j.jenkinsName).map(getJobInfo)
-);
+const allTests = jobStore.tests.map(j => j.jenkinsName);
+const allBuilds = jobStore.builds.map(j => j.jenkinsName);
+const getJenkinsInfo = Promise.all([...allTests, ...allBuilds].map(getJobInfo));
 
-const getJenkinsBuilds = Promise.all(
-  jobStore.builds.map(j => j.jenkinsName).map(getJobInfo)
-);
+const tryFormatReport = jobReport => {
+  try {
+    return formatJobReport(jobReport);
+  } catch (e) {
+    return null;
+  }
+};
 
 const formatJobReport = jobReport => ({
   text: jobReport.name,
@@ -77,40 +82,27 @@ const formatJobReport = jobReport => ({
   ]
 });
 
-// Promise.all([getJenkins, setupSshActions(DEFAULT_ENVS, DEFAULT_SERVERS)])
-//   .then(results => {
-//     const [jenkinsReports, sshStuff] = results;
-//     const title = jenkinsReports
-//       .filter(j => j.healthReport.score < 90)
-//       .map(j => j.name)
-//       .join('|');
-//     const aboveTheFold = {
-//       text: title.length === 0 ? ':thumbsup:' : title,
-//       color: bitbar.darkMode ? 'white' : 'red',
-//       dropdown: false
-//     };
-//     const formattedJenkinsReports = [];
-//     jenkinsReports.forEach(r => {
-//       try {
-//         formattedJenkinsReports.push(formatJobReport(r));
-//       } catch (e) {
-//         // Just want to ignore
-//       }
-//     });
+Promise.all([getJenkinsInfo, setupSshActions(DEFAULT_ENVS, DEFAULT_SERVERS)])
+  .then(results => {
+    const [jenkinsReports, sshStuff] = results;
+    const title = jenkinsReports
+      .filter(j => j.healthReport.score < 90)
+      .map(j => j.name)
+      .join('|');
+    const aboveTheFold = {
+      text: title.length === 0 ? ':thumbsup:' : title,
+      color: bitbar.darkMode ? 'white' : 'red',
+      dropdown: false
+    };
 
-//     return bitbar([
-//       aboveTheFold,
-//       Separator,
-//       { text: 'Monitored Builds', size: '15' },
-//       formattedJenkinsReports,
-//       Separator,
-//       { text: 'SSH To Servers', size: '15' },
-//       ...sshStuff
-//     ]);
-//   })
-//   .catch(console.log);
-getJenkinsBuilds.then(results => {
-  console.log(Object.keys(results[0]));
-  console.log(results[0].buildHistory);
-});
-
+    return bitbar([
+      aboveTheFold,
+      Separator,
+      { text: 'Monitored Builds', size: '15' },
+      ...jenkinsReports.map(tryFormatReport).filter(a => a),
+      Separator,
+      { text: 'SSH To Servers', size: '15' },
+      ...sshStuff
+    ]);
+  })
+  .catch(console.log);

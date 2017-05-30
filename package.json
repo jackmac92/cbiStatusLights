@@ -2,6 +2,7 @@
   "name": "cbiStatusLights",
   "version": "1.0.0",
   "main": "index.js",
+  "module": "bundle.esm.js",
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -12,22 +13,30 @@
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "babel-preset-es2015": "^6.24.1"
+    "babel-preset-es2015": "^6.24.1",
+    "rollup": "^0.41.6",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-json": "^2.1.1",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-globals": "^1.1.0",
+    "rollup-plugin-node-resolve": "^3.0.0"
   },
   "dependencies": {
     "aws-sdk": "^2.51.0",
     "bitbar": "^0.3.0",
-    "cbiJenkins": "^1.3.0",
-    "cbiServerUtils": "^2.0.0",
-    "get-port": "^3.1.0",
+    "cbiJenkins": "^2.0.0",
+    "cbiServerUtils": "^3.0.0",
     "isomorphic-fetch": "^2.2.1",
-    "jenkins": "^0.20.0",
     "listr": "^0.12.0",
     "lowdb": "^0.16.2",
-    "nanybar": "^1.0.2",
     "node-feedparser": "^1.0.1",
     "ora": "^1.2.0",
-    "shelljs": "^0.7.7",
-    "webpack": "^2.5.1"
+    "shelljs": "^0.7.7"
+  },
+  "node": {
+    "fs": true,
+    "net": "empty",
+    "tls": "empty",
+    "console": true
   }
 }
