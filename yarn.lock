@@ -126,8 +126,8 @@ async-each@^1.0.0:
   resolved "http://localhost:4873/async-each/-/async-each-1.0.1.tgz#19d386a1d9edc6e7c1c85d388aedbcc56d33602d"
 
 async@^2.1.2:
-  version "2.4.0"
-  resolved "http://localhost:4873/async/-/async-2.4.0.tgz#4990200f18ea5b837c2cc4f8c031a6985c385611"
+  version "2.4.1"
+  resolved "http://localhost:4873/async/-/async-2.4.1.tgz#62a56b279c98a11d0987096a01cc3eeb8eb7bbd7"
   dependencies:
     lodash "^4.14.0"
 
@@ -136,8 +136,8 @@ asynckit@^0.4.0:
   resolved "http://localhost:4873/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
 aws-sdk@^2.51.0, aws-sdk@^2.52.0:
-  version "2.54.0"
-  resolved "http://localhost:4873/aws-sdk/-/aws-sdk-2.54.0.tgz#de97bdc82a975a71ad9f63192c8c75f623992c18"
+  version "2.55.0"
+  resolved "http://localhost:4873/aws-sdk/-/aws-sdk-2.55.0.tgz#7528f3729ecbc8e5aea42ac89e1ff2537086f7c2"
   dependencies:
     buffer "5.0.6"
     crypto-browserify "1.0.9"
@@ -799,15 +799,15 @@ caseless@~0.12.0:
   version "0.12.0"
   resolved "http://localhost:4873/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
 
-cbiJenkins@^1.0.3:
-  version "1.0.4"
-  resolved "http://localhost:4873/cbiJenkins/-/cbiJenkins-1.0.4.tgz#fc8ab5337efe46ae1e5eb21e33bdac31048e6193"
+cbiJenkins@^1.3.0:
+  version "1.3.0"
+  resolved "http://localhost:4873/cbiJenkins/-/cbiJenkins-1.3.0.tgz#0cf9305e31f63b22a67fdda5379fae5d9eab2bb8"
   dependencies:
     jenkins "^0.20.0"
 
-cbiServerUtils@^1.2.0:
-  version "1.3.0"
-  resolved "http://localhost:4873/cbiServerUtils/-/cbiServerUtils-1.3.0.tgz#75ca813184e79d1b24a1093532f24318f1ba881a"
+cbiServerUtils@^2.0.0:
+  version "2.0.0"
+  resolved "http://localhost:4873/cbiServerUtils/-/cbiServerUtils-2.0.0.tgz#b160e4f624b1667892f71ce806d285c8b0618314"
   dependencies:
     aws-sdk "^2.52.0"
     isomorphic-fetch "^2.2.1"
@@ -1303,13 +1303,13 @@ glob-parent@^2.0.0:
     is-glob "^2.0.0"
 
 glob@^7.0.0, glob@^7.0.5:
-  version "7.1.1"
-  resolved "http://localhost:4873/glob/-/glob-7.1.1.tgz#805211df04faaf1c63a3600306cdf5ade50b2ec8"
+  version "7.1.2"
+  resolved "http://localhost:4873/glob/-/glob-7.1.2.tgz#c19c9df9a028702d678612384a6552404c636d15"
   dependencies:
     fs.realpath "^1.0.0"
     inflight "^1.0.4"
     inherits "2"
-    minimatch "^3.0.2"
+    minimatch "^3.0.4"
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
@@ -1827,7 +1827,7 @@ minimalistic-crypto-utils@^1.0.0, minimalistic-crypto-utils@^1.0.1:
   version "1.0.1"
   resolved "http://localhost:4873/minimalistic-crypto-utils/-/minimalistic-crypto-utils-1.0.1.tgz#f6c00c1c0b082246e5c4d99dfb8c7c083b2b582a"
 
-minimatch@^3.0.0, minimatch@^3.0.2:
+minimatch@^3.0.0, minimatch@^3.0.2, minimatch@^3.0.4:
   version "3.0.4"
   resolved "http://localhost:4873/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
   dependencies:
@@ -1868,8 +1868,8 @@ node-feedparser@^1.0.1:
     string-stream "0.0.7"
 
 node-fetch@^1.0.1:
-  version "1.6.3"
-  resolved "http://localhost:4873/node-fetch/-/node-fetch-1.6.3.tgz#dc234edd6489982d58e8f0db4f695029abcd8c04"
+  version "1.7.0"
+  resolved "http://localhost:4873/node-fetch/-/node-fetch-1.7.0.tgz#3ff6c56544f9b7fb00682338bb55ee6f54a8a0ef"
   dependencies:
     encoding "^0.1.11"
     is-stream "^1.0.1"
@@ -2639,7 +2639,7 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "http://localhost:4873/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
-uglify-js@^2.8.5:
+uglify-js@^2.8.27:
   version "2.8.27"
   resolved "http://localhost:4873/uglify-js/-/uglify-js-2.8.27.tgz#47787f912b0f242e5b984343be8e35e95f694c9c"
   dependencies:
@@ -2729,8 +2729,8 @@ webpack-sources@^0.2.3:
     source-map "~0.5.3"
 
 webpack@^2.5.1:
-  version "2.5.1"
-  resolved "http://localhost:4873/webpack/-/webpack-2.5.1.tgz#61742f0cf8af555b87460a9cd8bba2f1e3ee2fce"
+  version "2.6.0"
+  resolved "http://localhost:4873/webpack/-/webpack-2.6.0.tgz#7e650a92816abff5db5f43316b0b8b19b13d76c1"
   dependencies:
     acorn "^5.0.0"
     acorn-dynamic-import "^2.0.0"
@@ -2749,7 +2749,7 @@ webpack@^2.5.1:
     source-map "^0.5.3"
     supports-color "^3.1.0"
     tapable "~0.2.5"
-    uglify-js "^2.8.5"
+    uglify-js "^2.8.27"
     watchpack "^1.3.1"
     webpack-sources "^0.2.3"
     yargs "^6.0.0"

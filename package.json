@@ -17,8 +17,8 @@
   "dependencies": {
     "aws-sdk": "^2.51.0",
     "bitbar": "^0.3.0",
-    "cbiJenkins": "^1.0.3",
-    "cbiServerUtils": "^1.2.0",
+    "cbiJenkins": "^1.3.0",
+    "cbiServerUtils": "^2.0.0",
     "get-port": "^3.1.0",
     "isomorphic-fetch": "^2.2.1",
     "jenkins": "^0.20.0",
