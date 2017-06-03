@@ -642,6 +642,11 @@ bitbar@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/bitbar/-/bitbar-0.3.0.tgz#1c3f98365effdf88918e82e2e42336085138bc72"
 
+bl@~0.8.1:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/bl/-/bl-0.8.2.tgz#c9b6bca08d1bc2ea00fc8afb4f1a5fd1e1c66e4e"
+  dependencies:
+    readable-stream "~1.0.26"
 
 block-stream@*:
   version "0.0.9"
