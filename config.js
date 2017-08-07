@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   jenkins: {
     password: '2zxx8b4Pba7u',
     username: 'jmccown'

@@ -14,7 +14,7 @@
     "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
-    "rollup": "^0.41.6",
+    "rollup": "^0.42.0",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-json": "^2.1.1",
     "rollup-plugin-node-builtins": "^2.1.2",
@@ -22,16 +22,10 @@
     "rollup-plugin-node-resolve": "^3.0.0"
   },
   "dependencies": {
-    "aws-sdk": "^2.51.0",
     "bitbar": "^0.3.0",
-    "cbiJenkins": "^2.0.0",
+    "cbiJenkins": "^5.1.0",
     "cbiServerUtils": "^3.0.0",
-    "isomorphic-fetch": "^2.2.1",
-    "listr": "^0.12.0",
-    "lowdb": "^0.16.2",
-    "node-feedparser": "^1.0.1",
-    "ora": "^1.2.0",
-    "shelljs": "^0.7.7"
+    "webpack": "^2.6.1"
   },
   "node": {
     "fs": true,

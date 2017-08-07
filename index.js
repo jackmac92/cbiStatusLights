@@ -1,19 +1,34 @@
 const bitbar = require('bitbar');
-import { getJobInfo } from 'cbiJenkins';
-import { getManyServers } from 'cbiServerUtils';
-import config from './config';
+const JenkinsFetcher = require('cbiJenkins');
+const path = require('path');
+const serverUtils = require('cbiServerUtils');
+const config = require('./config');
+const _ = require('lodash');
+
+const { getManyServers } = serverUtils;
 
 const { sep: Separator } = bitbar;
 const jobStore = {
   tests: config.monitor.tests.map(t => ({
     name: t,
+    friendlyName: `${t.split('/').join(' ')} test`,
     jenkinsName: `tests/integration/${t}`
   })),
   builds: config.monitor.builds.map(t => ({
     name: t,
+    friendlyName: `${t.split('/').join(' ')} build`,
     jenkinsName: t
   }))
 };
+
+const jenkUsername = process.env.JENKINS_USERNAME;
+const jenkPassword = process.env.JENKINS_PASSWORD;
+
+const JenkinsFetch = new JenkinsFetcher({
+  dir: path.join(process.env.HOME, 'jenkinsCache'),
+  username: jenkUsername,
+  password: jenkPassword
+});
 
 const DEFAULT_ENVS = ['dev', 'staging', 'prod'];
 const DEFAULT_SERVERS = ['api', 'cbi-site', 'test-runner'];
@@ -36,7 +51,10 @@ const setupSshActions = (envs, servers) =>
 
 const allTests = jobStore.tests.map(j => j.jenkinsName);
 const allBuilds = jobStore.builds.map(j => j.jenkinsName);
-const getJenkinsInfo = Promise.all([...allTests, ...allBuilds].map(getJobInfo));
+const allJenkins = [...allTests, ...allBuilds];
+const getJenkinsInfo = Promise.all(
+  allJenkins.map(j => JenkinsFetch.getJobInfo(j).catch(err => {}))
+);
 
 const tryFormatReport = jobReport => {
   try {
@@ -46,55 +64,106 @@ const tryFormatReport = jobReport => {
   }
 };
 
-const formatJobReport = jobReport => ({
-  text: jobReport.name,
-  color: jobReport.buildHistory[0].result === 'SUCCESS' ? 'green' : 'red',
-  submenu: [
-    // { text: 'current build' },
-    {
-      text: 'Build Now',
-      bash: 'curl',
-      param1: '-X',
-      param2: 'POST',
-      param3: jobReport.buildNowUrl,
-      terminal: false,
-      color: 'blue'
-    },
-    {
-      text: 'Last Failure',
-      href: jobReport.lastFailedBuild.url,
-      color: 'red'
-    },
-    {
-      text: 'Last Successful Build',
-      href: jobReport.lastSuccessfulBuild.url,
-      color: 'green'
-    },
-    {
-      text: 'Full History',
-      submenu: jobReport.buildHistory.map(b => ({
-        text: b.fullDisplayName,
-        href: b.url,
-        color: b.result === 'SUCCESS' ? 'green' : 'red',
-        size: 8
-      }))
-    }
-  ]
-});
+// const formatCmdArr = cmdArr => ({
+//   bash: cmdArr[0],
+//   ...cmdArr.slice(1).map((par, i) => ({
+//     [`param${i + 1}`]: `${par}`
+//   }))
+// });
+
+const formatCmdArr = cmdArr => {
+  const result = {};
+  result.bash = cmdArr[0];
+  cmdArr.slice(1).forEach((par, i) => {
+    result[`param${i + 1}`] = `${par}`;
+  });
+  return result;
+};
+
+const formatCmd = cmd => formatCmdArr(cmd.split(' '));
+
+const lastBuildFailed = ({ isError, buildHistory }) => {
+  if (isError) {
+    return false;
+  }
+  if (buildHistory[0].building !== true) {
+    return buildHistory[0].result !== 'SUCCESS';
+  } else {
+    return buildHistory[1].result !== 'SUCCESS';
+  }
+};
+
+const formatJobReport = jobReport => {
+  // if (jobReport.isError) {
+  //   return {
+  //     text: `Error getting something`,
+  //     submenu: [{ text: jobReport.err }]
+  //   };
+  // }
+  const isBuilding = jobReport.buildHistory[0].building === true;
+  const color = jobReport.buildHistory[isBuilding ? 1 : 0].result === 'SUCCESS'
+    ? 'green'
+    : 'red';
+  const text = `${jobReport.name}${isBuilding ? ' 🚧' : ''}`;
+  return {
+    text,
+    color,
+    submenu: [
+      isBuilding
+        ? {
+            text: 'Stream Current Logs',
+            ...formatCmd(
+              `JENKINS_URL="https://${jenkUsername}:${jenkPassword}@jenkins.cbinsights.com" && nestor console ${jobReport.jenkinsName
+                .split('/')
+                .join('/job/')}`
+            ),
+            terminal: true,
+            size: 16
+          }
+        : {
+            text: 'Build Now',
+            ...formatCmd(`curl -X POST ${jobReport.buildNowUrl}`),
+            terminal: false,
+            color: 'blue'
+          },
+      {
+        text: 'Last Failure',
+        href: jobReport.lastFailedBuild.url,
+        color: 'red'
+      },
+      {
+        text: 'Last Successful Build',
+        href: jobReport.lastSuccessfulBuild.url,
+        color: 'green'
+      },
+      {
+        text: 'Full History',
+        submenu: jobReport.buildHistory.map(b => ({
+          text: b.fullDisplayName,
+          href: b.url,
+          color: b.result === 'SUCCESS' ? 'green' : 'red',
+          size: 10
+        }))
+      }
+    ]
+  };
+};
+
+const badEmoji = ['💥', '💣', '🔥', '☢️'];
 
 Promise.all([getJenkinsInfo, setupSshActions(DEFAULT_ENVS, DEFAULT_SERVERS)])
   .then(results => {
     const [jenkinsReports, sshStuff] = results;
-    const title = jenkinsReports
-      .filter(j => j.healthReport.score < 90)
-      .map(j => j.name)
-      .join('|');
+
+    const title = jenkinsReports.filter(lastBuildFailed).length === 0
+      ? ':thumbsup:'
+      : _.sample(badEmoji);
+
     const aboveTheFold = {
-      text: title.length === 0 ? ':thumbsup:' : title,
+      text: title,
       color: bitbar.darkMode ? 'white' : 'red',
       dropdown: false
     };
-
     return bitbar([
       aboveTheFold,
       Separator,
