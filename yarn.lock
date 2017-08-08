@@ -823,7 +823,7 @@ cbiJenkins@^5.1.0:
     lodash "^4.17.4"
     mkdirp "^0.5.1"
 
-cbiServerUtils@^3.0.0:
+cbiServerUtils@^3.1.1:
   version "3.1.1"
   resolved "https://npm.jackmac.party/cbiServerUtils/-/cbiServerUtils-3.1.1.tgz#2226130aa3ec3827aa1bf9da44d8ddff9d3d4545"
   dependencies:
