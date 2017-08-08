@@ -1,12 +1,4 @@
 module.exports = {
-  jenkins: {
-    password: '2zxx8b4Pba7u',
-    username: 'jmccown'
-  },
-  jira: {
-    username: 'jmccown@cbinsights.com',
-    password: 'Dashah7992'
-  },
   monitor: {
     tests: [
       'api/selenium-grid-dev',
