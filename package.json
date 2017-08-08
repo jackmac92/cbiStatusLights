@@ -24,7 +24,7 @@
   "dependencies": {
     "bitbar": "^0.3.0",
     "cbiJenkins": "^5.3.0",
-    "cbiServerUtils": "^3.2.0",
+    "lodash": "^4.17.4",
     "webpack": "^2.6.1"
   },
   "node": {

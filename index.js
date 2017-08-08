@@ -1,11 +1,8 @@
 const bitbar = require('bitbar');
 const JenkinsFetcher = require('cbiJenkins');
 const path = require('path');
-const serverUtils = require('cbiServerUtils');
 const config = require('./config');
 const _ = require('lodash');
-
-const { getManyServers } = serverUtils;
 
 const { sep: Separator } = bitbar;
 const jobStore = {
@@ -29,25 +26,6 @@ const JenkinsFetch = new JenkinsFetcher({
   username: jenkUsername,
   password: jenkPassword
 });
-
-const DEFAULT_ENVS = ['dev', 'staging', 'prod'];
-const DEFAULT_SERVERS = ['api', 'cbi-site', 'test-runner'];
-
-const setupSshActions = (envs, servers) =>
-  getManyServers(envs, servers).then(serverMap =>
-    Object.keys(serverMap).map(server => ({
-      text: server,
-      submenu: envs.map(env => ({
-        text: `${env} servers`,
-        submenu: serverMap[server][env].map(ip => ({
-          text: `ssh to ${ip}`,
-          bash: 'ssh',
-          param1: ip,
-          terminal: true
-        }))
-      }))
-    }))
-  );
 
 const allTests = jobStore.tests.map(j => j.jenkinsName);
 const allBuilds = jobStore.builds.map(j => j.jenkinsName);
@@ -168,10 +146,7 @@ Promise.all([getJenkinsInfo, setupSshActions(DEFAULT_ENVS, DEFAULT_SERVERS)])
       aboveTheFold,
       Separator,
       { text: 'Monitored Builds', size: '15' },
-      ...jenkinsReports.map(tryFormatReport).filter(a => a),
-      Separator,
-      { text: 'SSH To Servers', size: '15' },
-      ...sshStuff
+      ...jenkinsReports.map(tryFormatReport).filter(a => a)
     ]);
   })
   .catch(console.log);
