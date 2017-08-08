@@ -23,8 +23,8 @@
   },
   "dependencies": {
     "bitbar": "^0.3.0",
-    "cbiJenkins": "^5.1.0",
-    "cbiServerUtils": "^3.1.1",
+    "cbiJenkins": "^5.3.0",
+    "cbiServerUtils": "^3.2.0",
     "webpack": "^2.6.1"
   },
   "node": {

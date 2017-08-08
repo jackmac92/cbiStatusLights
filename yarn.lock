@@ -814,18 +814,18 @@ caseless@~0.12.0:
   version "0.12.0"
   resolved "https://npm.jackmac.party/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
 
-cbiJenkins@^5.1.0:
-  version "5.1.0"
-  resolved "https://npm.jackmac.party/cbiJenkins/-/cbiJenkins-5.1.0.tgz#3df5587bdfb86ba4ace90a9ef7759145fa61937c"
+cbiJenkins@^5.3.0:
+  version "5.3.0"
+  resolved "https://npm.jackmac.party/cbiJenkins/-/cbiJenkins-5.3.0.tgz#60721ef4195f88b46a765d049c5ed3ede6e2786c"
   dependencies:
     jenkins "^0.20.0"
-    localApi "^2.1.0"
+    localApi "^2.3.0"
     lodash "^4.17.4"
     mkdirp "^0.5.1"
 
-cbiServerUtils@^3.1.1:
-  version "3.1.1"
-  resolved "https://npm.jackmac.party/cbiServerUtils/-/cbiServerUtils-3.1.1.tgz#2226130aa3ec3827aa1bf9da44d8ddff9d3d4545"
+cbiServerUtils@^3.2.0:
+  version "3.2.0"
+  resolved "https://npm.jackmac.party/cbiServerUtils/-/cbiServerUtils-3.2.0.tgz#63d4dbfacb3b11ae669da079c0ee362b9eee84d5"
   dependencies:
     aws-sdk "^2.52.0"
     isomorphic-fetch "^2.2.1"
@@ -1885,9 +1885,9 @@ loader-utils@^1.0.2:
     emojis-list "^2.0.0"
     json5 "^0.5.0"
 
-localApi@^2.1.0:
-  version "2.2.0"
-  resolved "https://npm.jackmac.party/localApi/-/localApi-2.2.0.tgz#4571a8120cfe73d9c3431bed1522b1d0f711c040"
+localApi@^2.3.0:
+  version "2.3.0"
+  resolved "https://npm.jackmac.party/localApi/-/localApi-2.3.0.tgz#50df6babc0d9eda888261ef3deeb14a9760bba04"
   dependencies:
     axios "^0.16.2"
     mkdirp "^0.5.1"
