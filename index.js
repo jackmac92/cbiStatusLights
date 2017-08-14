@@ -2,7 +2,6 @@ const bitbar = require('bitbar');
 const JenkinsFetcher = require('cbiJenkins');
 const path = require('path');
 const config = require('./config');
-const _ = require('lodash');
 
 const { sep: Separator } = bitbar;
 const jobStore = {
@@ -30,24 +29,16 @@ const JenkinsFetch = new JenkinsFetcher({
 const allTests = jobStore.tests.map(j => j.jenkinsName);
 const allBuilds = jobStore.builds.map(j => j.jenkinsName);
 const allJenkins = [...allTests, ...allBuilds];
-const getJenkinsInfo = Promise.all(
-  allJenkins.map(j => JenkinsFetch.getJobInfo(j).catch(err => {}))
-);
 
 const tryFormatReport = jobReport => {
   try {
     return formatJobReport(jobReport);
   } catch (e) {
-    return null;
+    return {
+      text: `Unable to get job`
+    };
   }
 };
-
-// const formatCmdArr = cmdArr => ({
-//   bash: cmdArr[0],
-//   ...cmdArr.slice(1).map((par, i) => ({
-//     [`param${i + 1}`]: `${par}`
-//   }))
-// });
 
 const formatCmdArr = cmdArr => {
   const result = {};
@@ -72,12 +63,6 @@ const lastBuildFailed = ({ isError, buildHistory }) => {
 };
 
 const formatJobReport = jobReport => {
-  // if (jobReport.isError) {
-  //   return {
-  //     text: `Error getting something`,
-  //     submenu: [{ text: jobReport.err }]
-  //   };
-  // }
   const isBuilding = jobReport.buildHistory[0].building === true;
   const color = jobReport.buildHistory[isBuilding ? 1 : 0].result === 'SUCCESS'
     ? 'green'
@@ -127,16 +112,25 @@ const formatJobReport = jobReport => {
   };
 };
 
-const badEmoji = ['💥', '💣', '🔥', '☢️'];
+const makeTitle = reports => {
+  if (reports.some(r => r.isError)) {
+    return ':warning:';
+  } else if (reports.some(lastBuildFailed)) {
+    return ':fire:';
+  }
+  return ':thumbsup:';
+};
 
-Promise.all([getJenkinsInfo, setupSshActions(DEFAULT_ENVS, DEFAULT_SERVERS)])
-  .then(results => {
-    const [jenkinsReports, sshStuff] = results;
-
-    const title = jenkinsReports.filter(lastBuildFailed).length === 0
-      ? ':thumbsup:'
-      : _.sample(badEmoji);
-
+Promise.all(
+  allJenkins.map(j =>
+    JenkinsFetch.getJobInfo(j).catch(err => ({
+      error: true,
+      err
+    }))
+  )
+)
+  .then(jenkinsReports => {
+    const title = makeTitle(jenkinsReports);
     const aboveTheFold = {
       text: title,
       color: bitbar.darkMode ? 'white' : 'red',
