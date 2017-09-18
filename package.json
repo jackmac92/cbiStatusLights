@@ -4,6 +4,10 @@
   "main": "index.js",
   "module": "bundle.esm.js",
   "license": "MIT",
+  "scripts": {
+    "prebuild": "yarn install",
+    "build": "webpack"
+  },
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
