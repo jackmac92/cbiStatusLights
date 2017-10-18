@@ -8,13 +8,13 @@ const jobStore = {
   tests: config.monitor.tests.map(t => ({
     name: t,
     friendlyName: `${t.split('/').join(' ')} test`,
-    jenkinsName: `tests/integration/${t}`
+    jenkinsName: `tests/integration/${t}`,
   })),
   builds: config.monitor.builds.map(t => ({
     name: t,
     friendlyName: `${t.split('/').join(' ')} build`,
-    jenkinsName: t
-  }))
+    jenkinsName: t,
+  })),
 };
 
 const jenkUsername = process.env.JENKINS_USERNAME;
@@ -23,7 +23,7 @@ const jenkPassword = process.env.JENKINS_PASSWORD;
 const JenkinsFetch = new JenkinsFetcher({
   dir: path.join(process.env.HOME, 'jenkinsCache'),
   username: jenkUsername,
-  password: jenkPassword
+  password: jenkPassword,
 });
 
 const allTests = jobStore.tests.map(j => j.jenkinsName);
@@ -35,7 +35,7 @@ const tryFormatReport = jobReport => {
     return formatJobReport(jobReport);
   } catch (e) {
     return {
-      text: `Unable to get job`
+      text: `Unable to get job`,
     };
   }
 };
@@ -61,12 +61,10 @@ const lastBuildFailed = ({ isError, buildHistory }) => {
     return buildHistory[1].result !== 'SUCCESS';
   }
 };
-
+const JENKINS_URL = `https://${jenkUsername}:${jenkPassword}@jenkins.cbinsights.com`;
 const formatJobReport = jobReport => {
   const isBuilding = jobReport.buildHistory[0].building === true;
-  const color = jobReport.buildHistory[isBuilding ? 1 : 0].result === 'SUCCESS'
-    ? 'green'
-    : 'red';
+  const color = jobReport.buildHistory[isBuilding ? 1 : 0].result === 'SUCCESS' ? 'green' : 'red';
   const text = `${jobReport.name}${isBuilding ? ' 🚧' : ''}`;
   return {
     text,
@@ -76,28 +74,26 @@ const formatJobReport = jobReport => {
         ? {
             text: 'Stream Current Logs',
             ...formatCmd(
-              `JENKINS_URL="https://${jenkUsername}:${jenkPassword}@jenkins.cbinsights.com" && nestor console ${jobReport.jenkinsName
-                .split('/')
-                .join('/job/')}`
+              `JENKINS_URL="${JENKINS_URL}" nestor console ${jobReport.jenkinsName.split('/').join('/job/')}`
             ),
             terminal: true,
-            size: 16
+            size: 16,
           }
         : {
             text: 'Build Now',
             ...formatCmd(`curl -X POST ${jobReport.buildNowUrl}`),
             terminal: false,
-            color: 'blue'
+            color: 'blue',
           },
       {
         text: 'Last Failure',
         href: jobReport.lastFailedBuild.url,
-        color: 'red'
+        color: 'red',
       },
       {
         text: 'Last Successful Build',
         href: jobReport.lastSuccessfulBuild.url,
-        color: 'green'
+        color: 'green',
       },
       {
         text: 'Full History',
@@ -105,10 +101,10 @@ const formatJobReport = jobReport => {
           text: b.fullDisplayName,
           href: b.url,
           color: b.result === 'SUCCESS' ? 'green' : 'red',
-          size: 10
-        }))
-      }
-    ]
+          size: 10,
+        })),
+      },
+    ],
   };
 };
 
@@ -125,7 +121,7 @@ Promise.all(
   allJenkins.map(j =>
     JenkinsFetch.getJobInfo(j).catch(err => ({
       error: true,
-      err
+      err,
     }))
   )
 )
@@ -134,13 +130,13 @@ Promise.all(
     const aboveTheFold = {
       text: title,
       color: bitbar.darkMode ? 'white' : 'red',
-      dropdown: false
+      dropdown: false,
     };
     return bitbar([
       aboveTheFold,
       Separator,
       { text: 'Monitored Builds', size: '15' },
-      ...jenkinsReports.map(tryFormatReport).filter(a => a)
+      ...jenkinsReports.map(tryFormatReport).filter(a => a),
     ]);
   })
   .catch(console.log);
