@@ -74,7 +74,7 @@ const formatJobReport = jobReport => {
         ? {
             text: 'Stream Current Logs',
             ...formatCmd(
-              `JENKINS_URL="${JENKINS_URL}" nestor console ${jobReport.jenkinsName.split('/').join('/job/')}`
+              `nestor console ${jobReport.jenkinsName.split('/').join('/job/')}`
             ),
             terminal: true,
             size: 16,
